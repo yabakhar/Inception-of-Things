@@ -1,0 +1,37 @@
+$install_k3s = <<-SHELL
+curl -sfL https://get.k3s.io | sh -s - --no-deploy traefik --write-kubeconfig-mode 644 --node-name yabakharS --flannel-iface=eth1
+sudo cat /var/lib/rancher/k3s/server/token > /vagrant/token
+SHELL
+
+$install_k3s_agent = <<-SHELL
+curl -sfL https://get.k3s.io | K3S_NODE_NAME=yabakharSW K3S_URL=https://192.168.42.110:6443 K3S_TOKEN_FILE=/vagrant/token sh -s - --flannel-iface=eth1
+SHELL
+
+Vagrant.configure("2") do |config|
+  config.vm.define "yabakharS" do |s|
+       s.vm.provider "virtualbox" do |vb|
+          vb.name = "yabakharS"
+           vb.memory = 1024
+          vb.cpus = 1
+      end
+  s.vm.box = "centos/7"
+  s.vm.hostname = "yabakharS"
+  s.vm.network :private_network, ip: "192.168.42.110"
+  s.vm.provision "shell", inline: $install_k3s
+  end
+  config.trigger.after :up do |trigger|
+      trigger.run = {inline: "vagrant scp yabakharS:/vagrant/token ."}
+  end
+   config.vm.define "yabakharSW" do |sw|
+       sw.vm.provider "virtualbox" do |vb|
+           vb.memory = 1024
+          vb.cpus = 1
+          vb.name = "yabakharSW"
+       end
+      sw.vm.box = "centos/7"
+      sw.vm.hostname = "yabakharSW"
+      sw.vm.network :private_network, ip: "192.168.42.111"
+      sw.vm.provision "shell", inline: $install_k3s_agent
+  end
+
+end
