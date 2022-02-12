@@ -1,0 +1,25 @@
+$install_k3s = <<-SHELL
+curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --node-name yabakharS --flannel-iface=eth1
+echo "hahah ah"
+sudo yum install -y net-tools
+/usr/local/bin/kubectl apply -f /vagrant/appone-deploy.yaml
+/usr/local/bin/kubectl apply -f /vagrant/apptwo-deploy.yaml
+/usr/local/bin/kubectl apply -f /vagrant/appthree-deploy.yaml
+/usr/local/bin/kubectl apply -f /vagrant/services.yaml
+/usr/local/bin/kubectl apply -f /vagrant/ingress.yaml
+SHELL
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+  config.vm.hostname = "yabakharS"
+  config.vm.define "yabakharS" do |s|
+    s.vm.hostname = "yabakharS"
+    s.vm.network :private_network, ip: "192.168.42.110"
+    s.vm.provider "virtualbox" do |vb|
+      vb.memory = 2048
+      vb.cpus = 2
+      vb.name = "yabakharS"
+    end
+    s.vm.provision "shell", inline: $install_k3s
+  end
+end
