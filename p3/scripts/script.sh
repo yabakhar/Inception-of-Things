@@ -1,7 +1,7 @@
 sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 sudo curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-sudo k3d cluster create my-cluster -p 8888:80@loadbalancer --agents 2
+sudo k3d cluster create my-cluster -p 80:80@loadbalancer
 sudo wget https://raw.githubusercontent.com/argoproj/argo-cd/v2.0.1/manifests/install.yaml
 sudo sed -i '2743 i \        - --insecure' install.yaml
 sudo sed -i '2744 i \        - --rootpath' install.yaml
