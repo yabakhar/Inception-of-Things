@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    app: wilapp
+  name: wilapp
+spec:
+  project: default
+  destination:
+    namespace: dev
+    server: https://kubernetes.default.svc
+  source:
+    path: app
+    repoURL: https://github.com/ayoubgm/yabakhar.git
+    targetRevision: master
+    directory:
+      recurse: true
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
