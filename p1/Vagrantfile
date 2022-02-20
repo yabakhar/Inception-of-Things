@@ -1,5 +1,5 @@
 $install_k3s = <<-SHELL
-curl -sfL https://get.k3s.io | sh -s - --no-deploy traefik --write-kubeconfig-mode 644 --node-name yabakharS --flannel-iface=eth1
+curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --node-name yabakharS --flannel-iface=eth1
 sudo cat /var/lib/rancher/k3s/server/token > /vagrant/token
 SHELL
 

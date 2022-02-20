@@ -1,7 +1,5 @@
 $install_k3s = <<-SHELL
 curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --node-name yabakharS --flannel-iface=eth1
-echo "hahah ah"
-sudo yum install -y net-tools
 /usr/local/bin/kubectl apply -f /vagrant/appone-deploy.yaml
 /usr/local/bin/kubectl apply -f /vagrant/apptwo-deploy.yaml
 /usr/local/bin/kubectl apply -f /vagrant/appthree-deploy.yaml
